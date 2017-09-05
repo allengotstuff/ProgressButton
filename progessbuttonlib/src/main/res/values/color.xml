@@ -3,4 +3,5 @@
 
     <color name="default_downloading_text_color">#000000</color>
     <color name="default_not_downloading_text_color">#FFFFFF</color>
+    <color name="default_progress_color">#800000</color>
 </resources>

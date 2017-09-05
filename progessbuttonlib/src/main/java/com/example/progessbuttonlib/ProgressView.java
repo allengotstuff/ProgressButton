@@ -47,8 +47,7 @@ public class ProgressView extends View {
     }
 
 
-    public void displaySetWallPaper(boolean boo)
-    {
+    public void displaySetWallPaper(boolean boo) {
         setWallPaper = boo;
         invalidate();
     }
@@ -88,10 +87,10 @@ public class ProgressView extends View {
                 //clips the round rectangle to show the progress level %%%%
                 double firstPorition = progressWidth / firstRectangleProgressMax;
 
-                canvas.clipRect(new RectF(0, strockeWidth, (float) (firstPorition * height / 2), height-strockeWidth));
+                canvas.clipRect(new RectF(0, strockeWidth, (float) (firstPorition * height / 2), height - strockeWidth));
 
                 //draw the unifom rond rectangle, or circle.
-                canvas.drawRoundRect(new RectF(0, strockeWidth, height, height-strockeWidth), height / 2, height / 2, mProgressPaint);
+                canvas.drawRoundRect(new RectF(0, strockeWidth, height, height - strockeWidth), height / 2, height / 2, mProgressPaint);
                 canvas.restore();
                 break;
 
@@ -99,13 +98,13 @@ public class ProgressView extends View {
                 //draw the full round rectangle on the left
                 canvas.save();
                 canvas.clipRect(new RectF(0, 0, height / 2, height));
-                canvas.drawRoundRect(new RectF(0, strockeWidth, height, height-strockeWidth), height / 2, height / 2, mProgressPaint);
+                canvas.drawRoundRect(new RectF(0, strockeWidth, height, height - strockeWidth), height / 2, height / 2, mProgressPaint);
                 canvas.restore();
 
                 canvas.save();
                 double middlePortion = progressWidth / middleRectangleProgressMax;
-                canvas.clipRect(new RectF(height / 2, strockeWidth, (float) middlePortion * (weight - height / 2), height-strockeWidth));
-                canvas.drawRoundRect(new RectF(height / 2, strockeWidth, weight - height / 2, height-strockeWidth), 0, 0, mProgressPaint);
+                canvas.clipRect(new RectF(height / 2, strockeWidth, (float) middlePortion * (weight - height / 2), height - strockeWidth));
+                canvas.drawRoundRect(new RectF(height / 2, strockeWidth, weight - height / 2, height - strockeWidth), 0, 0, mProgressPaint);
                 canvas.restore();
 
                 break;
@@ -114,26 +113,25 @@ public class ProgressView extends View {
             case 3:
                 //draw the full round rectangle on the left
                 canvas.save();
-                canvas.clipRect(new RectF(0, strockeWidth, height / 2, height-strockeWidth));
-                canvas.drawRoundRect(new RectF(0, strockeWidth, height, height-strockeWidth), height / 2, height / 2, mProgressPaint);
+                canvas.clipRect(new RectF(0, strockeWidth, height / 2, height - strockeWidth));
+                canvas.drawRoundRect(new RectF(0, strockeWidth, height, height - strockeWidth), height / 2, height / 2, mProgressPaint);
                 canvas.restore();
 
                 // draw the full rectangle on the middle
-                canvas.drawRoundRect(new RectF(height / 2, strockeWidth, weight - height / 2, height-strockeWidth), 0, 0, mProgressPaint);
+                canvas.drawRoundRect(new RectF(height / 2, strockeWidth, weight - height / 2, height - strockeWidth), 0, 0, mProgressPaint);
 
                 //draw the full round rectangel on the right
                 canvas.save();
                 double rightPortion = (progressWidth - middleRectangleProgressMax) / (100 - middleRectangleProgressMax);
 
-                canvas.clipRect(new RectF((weight - height / 2), strockeWidth, (weight - height / 2) + (float) rightPortion * height / 2, height-strockeWidth));
-                canvas.drawRoundRect(new RectF(weight - height,strockeWidth, weight, height-strockeWidth), height / 2, height / 2, mProgressPaint);
+                canvas.clipRect(new RectF((weight - height / 2), strockeWidth, (weight - height / 2) + (float) rightPortion * height / 2, height - strockeWidth));
+                canvas.drawRoundRect(new RectF(weight - height, strockeWidth, weight, height - strockeWidth), height / 2, height / 2, mProgressPaint);
                 canvas.restore();
                 break;
         }
     }
 
-    public void clearProgress()
-    {
+    public void clearProgress() {
         isUpdating = false;
         invalidate();
     }
@@ -149,22 +147,21 @@ public class ProgressView extends View {
          */
         if (isUpdating) {
             textPaint.setColor(getResources().getColor(R.color.default_downloading_text_color));
-            displayText = (int)progressWidth + "%";
+            displayText = (int) progressWidth + "%";
         } else {
             textPaint.setColor(getResources().getColor(R.color.default_not_downloading_text_color));
             displayText = getResources().getString(R.string.download_button_default_text);
         }
 
-        if(setWallPaper)
-        {
-            textPaint.setColor(getResources().getColor(R.color.white));
-            displayText = getResources().getString(R.string.download_button_setwallpaper);
+        if (setWallPaper) {
+            textPaint.setColor(getResources().getColor(R.color.default_not_downloading_text_color));
+            displayText = getResources().getString(R.string.set_wallpaper);
         }
 
         if (isUpdating) {
             updateProgressBar(canvas);
         } else {
-            canvas.drawRoundRect(new RectF(0, strockeWidth, weight, height-strockeWidth), height / 2, height / 2, mProgressPaint);
+            canvas.drawRoundRect(new RectF(0, strockeWidth, weight, height - strockeWidth), height / 2, height / 2, mProgressPaint);
         }
 
 
@@ -186,7 +183,7 @@ public class ProgressView extends View {
     public void setProgress(double progress) {
         if (progress >= 100) {
             isUpdating = false;
-            setWallPaper =true;
+            setWallPaper = true;
         }
         isUpdating = true;
         progressWidth = progress;
@@ -197,11 +194,11 @@ public class ProgressView extends View {
     private void init() {
         mProgressPaint = new Paint();
         mProgressPaint.setAntiAlias(true);
-        mProgressPaint.setColor(getResources().getColor(R.color.progress_button_color));
+        mProgressPaint.setColor(getResources().getColor(R.color.default_progress_color));
 
         textPaint = new Paint();
         textPaint.setAntiAlias(true);
-        textPaint.setColor(getResources().getColor(R.color.white));
+        textPaint.setColor(getResources().getColor(R.color.default_not_downloading_text_color));
 
 
         outterLayer = new Paint();
@@ -209,12 +206,12 @@ public class ProgressView extends View {
         outterLayer.setStyle(Paint.Style.STROKE);
         //setting the outter layer line is width
         outterLayer.setStrokeWidth(strockeWidth);
-        outterLayer.setColor(getResources().getColor(R.color.progress_button_color));
+        outterLayer.setColor(getResources().getColor(R.color.default_progress_color));
 
         isUpdating = false;
         setWallPaper = false;
 
-        displayText = getResources().getString("DownLoad";
+        displayText = getResources().getString(R.string.download_button_default_text);
     }
 
     @Override
