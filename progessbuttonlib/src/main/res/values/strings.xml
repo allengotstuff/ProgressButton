@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">ProgessButtonLib</string>
+    <string name="download_button_default_text">Download</string>
+</resources>
