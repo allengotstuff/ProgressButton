@@ -30,7 +30,6 @@ public class ProgressView extends View {
     private double firstRectangleProgressMax;
     private double middleRectangleProgressMax;
     private double thirdRectangleProgressMax;
-    private boolean setWallPaper;
 
     public ProgressView(Context context) {
         super(context);
@@ -47,18 +46,13 @@ public class ProgressView extends View {
     }
 
 
-    public void displaySetWallPaper(boolean boo) {
-        setWallPaper = boo;
-        invalidate();
-    }
-
     /**
      * when updaing the progress, there are three steps:
      * 1. increase display portion of  the left round rectangle
      * 2. increase display portion of the middle round rectangle
      * 3. increase display portion of the right round rectangle
      *
-     * @return: tells the view, whice round rectangle to update base on progress level
+     * @return: tells the view, which round rectangle to update base on progress level
      * @param: the current progress level
      */
     private int upDateProgressStep() {
@@ -137,6 +131,24 @@ public class ProgressView extends View {
     }
 
     @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        super.onSizeChanged(w, h, oldw, oldh);
+
+        height = getMeasuredHeight();
+        weight = getMeasuredWidth();
+
+        textPaint.setTextSize(height / 2);
+
+        progressWidth = weight;
+
+        //calculate the progress increase interval for three parts of the rectangle
+        firstRectangleProgressMax = (((double) height / 2) / (double) weight) * 100;
+
+        middleRectangleProgressMax = 100 - firstRectangleProgressMax;
+
+    }
+
+    @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
         /**
@@ -153,10 +165,6 @@ public class ProgressView extends View {
             displayText = getResources().getString(R.string.download_button_default_text);
         }
 
-        if (setWallPaper) {
-            textPaint.setColor(getResources().getColor(R.color.default_not_downloading_text_color));
-            displayText = getResources().getString(R.string.set_wallpaper);
-        }
 
         if (isUpdating) {
             updateProgressBar(canvas);
@@ -183,7 +191,6 @@ public class ProgressView extends View {
     public void setProgress(double progress) {
         if (progress >= 100) {
             isUpdating = false;
-            setWallPaper = true;
         }
         isUpdating = true;
         progressWidth = progress;
@@ -209,27 +216,10 @@ public class ProgressView extends View {
         outterLayer.setColor(getResources().getColor(R.color.default_progress_color));
 
         isUpdating = false;
-        setWallPaper = false;
 
         displayText = getResources().getString(R.string.download_button_default_text);
     }
 
-    @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
-        super.onSizeChanged(w, h, oldw, oldh);
 
-        height = getMeasuredHeight();
-        weight = getMeasuredWidth();
-
-        textPaint.setTextSize(height / 2);
-
-        progressWidth = weight;
-
-        //calculate the progress increase interval for three parts of the rectangle
-        firstRectangleProgressMax = (((double) height / 2) / (double) weight) * 100;
-
-        middleRectangleProgressMax = 100 - firstRectangleProgressMax;
-
-    }
 
 }
