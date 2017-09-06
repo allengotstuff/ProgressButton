@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <declare-styleable name="ProgressView">
-        <attr name="outerStrokeWidth" format="integer" />
+        <attr name="outerStrokeWidth" format="dimension" />
         <attr name="outerStrokeColor" format="color"/>
         <attr name="buttonText" format="string"/>
         <attr name="buttonTextColor" format="color"/>
