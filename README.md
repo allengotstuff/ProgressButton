@@ -1,1 +1,3 @@
-A button that can turn into a progress when downloading, and turn back to a button
+# ProgressButton
+
+## A round rect button that can transform to a progress bar when downloading.
