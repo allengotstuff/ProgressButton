@@ -1,10 +1,12 @@
 package com.example.progessbuttonlib;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Paint;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.support.v4.content.ContextCompat;
 import android.util.AttributeSet;
 import android.view.View;
 
@@ -15,7 +17,7 @@ import android.view.View;
  */
 public class ProgressView extends View {
 
-    private static double MAX_PROGRESS = 100;
+
     private double currentProgress;
 
     private static String TAG = ProgressView.class.getSimpleName();
@@ -27,36 +29,84 @@ public class ProgressView extends View {
     private String displayText;
 
 
-    private float button_stroke_width = 1;
+    private float outerStrokeWidth;
+
+    private int outerStrokeColor;
+
+    private String buttonText;
+
+    private int buttonTextColor;
+
+    private int progressTextColor;
+
+    private int buttonColor;
+
+    private int maxProgress;
 
     public ProgressView(Context context) {
-        super(context);
-        init();
+        this(context, null);
     }
 
     public ProgressView(Context context, AttributeSet attr) {
         super(context, attr);
-        init();
+        init(context);
     }
 
-    private void init() {
-        mProgressPaint = new Paint();
-        mProgressPaint.setAntiAlias(true);
-        mProgressPaint.setColor(getResources().getColor(R.color.default_progress_color));
 
-        textPaint = new Paint();
-        textPaint.setAntiAlias(true);
-        textPaint.setColor(getResources().getColor(R.color.default_not_downloading_text_color));
+    private void init(Context context) {
+        TypedArray a = context.getTheme().obtainStyledAttributes(
+                null,
+                R.styleable.ProgressView,
+                0, 0);
+
+        try {
+            outerStrokeWidth = a.getInt(R.styleable.ProgressView_outerStrokeWidth, 4);
+
+            outerStrokeColor = a.getColor(R.styleable.ProgressView_outerStrokeColor, ContextCompat.getColor(context, R.color.yellow));
+
+            buttonText = a.getString(R.styleable.ProgressView_buttonText);
+
+            if(buttonText==null){
+                buttonText = getResources().getString(R.string.download_button_default_text);
+            }
+
+            buttonTextColor = a.getColor(R.styleable.ProgressView_buttonTextColor, ContextCompat.getColor(context, R.color.default_not_downloading_text_color));
+
+            progressTextColor = a.getColor(R.styleable.ProgressView_progressTextColor, ContextCompat.getColor(context, R.color.yellow));
+
+            buttonColor  = a.getColor(R.styleable.ProgressView_buttonColor, ContextCompat.getColor(context, R.color.default_progress_color));
+
+            maxProgress = a.getInt(R.styleable.ProgressView_maxProgress, 100);
 
 
-        butttonStokePaint = new Paint();
-        butttonStokePaint.setAntiAlias(true);
-        butttonStokePaint.setStyle(Paint.Style.STROKE);
-        //setting the outter layer line is width
-        butttonStokePaint.setStrokeWidth(button_stroke_width);
-        butttonStokePaint.setColor(getResources().getColor(R.color.yellow));
 
-        displayText = getResources().getString(R.string.download_button_default_text);
+            //in the begining, the round retangle should display 100%
+            currentProgress = maxProgress;
+
+            mProgressPaint = new Paint();
+            mProgressPaint.setAntiAlias(true);
+            mProgressPaint.setColor(buttonColor);
+
+            textPaint = new Paint();
+            textPaint.setAntiAlias(true);
+            textPaint.setColor(buttonTextColor);
+
+
+            butttonStokePaint = new Paint();
+            butttonStokePaint.setAntiAlias(true);
+            butttonStokePaint.setStyle(Paint.Style.STROKE);
+            //setting the outter layer line is width
+            butttonStokePaint.setStrokeWidth(outerStrokeWidth);
+
+            butttonStokePaint.setColor(outerStrokeColor);
+
+            displayText = buttonText;
+
+        } finally {
+            a.recycle();
+        }
+
+
     }
 
 
@@ -84,28 +134,28 @@ public class ProgressView extends View {
 
         canvas.save();
 
-        double coverPercentage = 1 - (MAX_PROGRESS - currentProgress) / MAX_PROGRESS;
+        double coverPercentage = 1 - (maxProgress - currentProgress) / maxProgress;
 
         canvas.clipRect(new RectF(0, 0, (float) (width * coverPercentage), height));
         canvas.drawRoundRect(new RectF(0, 0, width, height), height / 2, height / 2, mProgressPaint);
         canvas.restore();
 
-        drawButtonOutterStroke(canvas);
+        drawButtonOuterStroke(canvas);
 
     }
 
-    private void drawButtonOutterStroke(Canvas canvas) {
+    private void drawButtonOuterStroke(Canvas canvas) {
         //draw the outter layer of the progressbar.
 
         // the width of the stroke need to take into account, x , y coordinate use half of size on each size, hense need to divide stroke width for extra spacing.
 
-        canvas.drawArc(new RectF(button_stroke_width / 2, button_stroke_width / 2, height - button_stroke_width / 2, height - button_stroke_width / 2), 90, 180, false, butttonStokePaint);
+        canvas.drawArc(new RectF(outerStrokeWidth / 2, outerStrokeWidth / 2, height - outerStrokeWidth / 2, height - outerStrokeWidth / 2), 90, 180, false, butttonStokePaint);
 
-        canvas.drawLine(height / 2, button_stroke_width / 2, width - height / 2, button_stroke_width / 2, butttonStokePaint);
+        canvas.drawLine(height / 2, outerStrokeWidth / 2, width - height / 2, outerStrokeWidth / 2, butttonStokePaint);
 
-        canvas.drawArc(new RectF(width - height, button_stroke_width / 2, width - button_stroke_width / 2, height - button_stroke_width / 2), 270, 180, false, butttonStokePaint);
+        canvas.drawArc(new RectF(width - height, outerStrokeWidth / 2, width - outerStrokeWidth / 2, height - outerStrokeWidth / 2), 270, 180, false, butttonStokePaint);
 
-        canvas.drawLine(height / 2, height - button_stroke_width / 2, width - height / 2, height - button_stroke_width / 2, butttonStokePaint);
+        canvas.drawLine(height / 2, height - outerStrokeWidth / 2, width - height / 2, height - outerStrokeWidth / 2, butttonStokePaint);
 
         //draw the text in the center.
         Rect bound = new Rect();
@@ -116,8 +166,8 @@ public class ProgressView extends View {
     }
 
     public void updateProgress(double progress) {
-        if (progress >= MAX_PROGRESS) {
-            currentProgress = MAX_PROGRESS;
+        if (progress >= maxProgress) {
+            currentProgress = maxProgress;
         } else {
             currentProgress = progress;
         }
