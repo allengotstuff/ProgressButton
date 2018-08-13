@@ -1,5 +1,5 @@
 # ProgressButton
-(testing on main repo)
+
 ## A round rect button that can transform as a progress bar when downloading.
 
 ![alt text](https://media.giphy.com/media/Nmjo0F1BvKpJm/giphy.gif)
