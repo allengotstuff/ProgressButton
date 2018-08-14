@@ -4,7 +4,7 @@
 
 ![alt text](https://media.giphy.com/media/Nmjo0F1BvKpJm/giphy.gif)
 
-# How to use it
+# How to use it  (lalala)
 
 ### Custom attributes:
         <attr name="outerStrokeWidth" format="dimension" />
