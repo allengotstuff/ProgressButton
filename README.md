@@ -26,5 +26,5 @@
             
 ### Runtime update progress:
 
-    public void updateProgress()
+   ~~ public void updateProgress()
     
